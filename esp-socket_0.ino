@@ -5,8 +5,8 @@
 StaticJsonDocument<200> doc;
 
 /// WIFI Settings ///
-const char* ssid     = "SMART XIRKA";
-const char* password = "EngInEEr@30";
+const char* ssid     = "YOUR SSID WIFI";
+const char* password = "YOUR PASSWORS WIFI";
 
 /// Socket.IO Settings ///
 //char host[] = "db.smpvanilla.com";
@@ -15,7 +15,8 @@ int port = 5042;
 char path[] = "/socket.io/?transport=websocket";
 bool useSSL = true;
 const char * sslFingerprint = "";
-const char* topic = "send_data";
+const char* topic = "send_data"; //don't change dist
+const char* name = "YOUR DEVICE NAME" //from device you create
 
 unsigned long lastTime = 0;
 
@@ -62,7 +63,7 @@ void generate_json(){
   doc["data"]["humidity"] = random(0, 110);
   doc["data"]["flow"] = random(0, 100);
   doc["data"]["oksigen"] = random(0, 100); 
-  doc["name"] = "node_1";
+  doc["name"] = name;
   serializeJson(doc, json);
   webSocket.emit(topic, json);
 }
