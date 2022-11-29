@@ -15,8 +15,8 @@ int port = 5042;
 char path[] = "/socket.io/?transport=websocket";
 bool useSSL = true;
 const char * sslFingerprint = "";
-const char* topic = "send_data"; //don't change dist
-const char* name = "YOUR DEVICE NAME" //from device you create
+const char* topic = "send_data"; //don't change this
+const char* key = "KEY DEVICE" //from page device you create
 
 unsigned long lastTime = 0;
 
@@ -32,6 +32,11 @@ void socket_event(const char * payload, size_t length) {
   Serial.println(payload);
 }
 
+void socket_accept(const char * payload, size_t length) {
+  Serial.print("Accept Message : ");
+  Serial.println(payload);
+}
+
 void setup() {
   Serial.begin(115200);
   WiFi.begin(ssid, password);
@@ -40,7 +45,11 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
+  //send to server
   webSocket.on(topic, socket_event);
+  
+  //listen data from server
+  webSocket.on(key , socket_accept);
   
   if (useSSL) {
     webSocket.beginSSL(host, port, path, sslFingerprint);
@@ -63,7 +72,7 @@ void generate_json(){
   doc["data"]["humidity"] = random(0, 110);
   doc["data"]["flow"] = random(0, 100);
   doc["data"]["oksigen"] = random(0, 100); 
-  doc["name"] = name;
+  doc["key"] = key;
   serializeJson(doc, json);
   webSocket.emit(topic, json);
 }
