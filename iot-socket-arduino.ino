@@ -5,8 +5,8 @@
 StaticJsonDocument<200> doc;
 
 /// WIFI Settings ///
-const char* ssid     = "SMART XIRKA";
-const char* password = "EngInEEr@30";
+const char* ssid     = "YOUR SSID WIFI";
+const char* password = "YOUR PASSWORD WIFI";
 
 /// Socket.IO Settings ///
 char host[] = "api.smpvanilla.com";
@@ -14,7 +14,7 @@ int port = 5042;
 char path[] = "/socket.io/?transport=websocket";
 bool useSSL = true;
 const char* topic_server = "send_data"; //don`t delete this, you can`t send data if modify or delete
-const char* key = "6371fa1f4b64f54d3374a015-node_2"; //from page device you create
+const char* key = "YOUR KEY DEVICE"; //from page device you create
 
 unsigned long lastTime = 0;
 
