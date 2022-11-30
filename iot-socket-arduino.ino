@@ -1,41 +1,25 @@
 #include <ArduinoJson.h>
 #include <WiFi.h>
-#include <SocketIoClient.h>
+#include "./src/library/SocketIoClient/SocketIoClient.h"
 
 StaticJsonDocument<200> doc;
 
 /// WIFI Settings ///
-const char* ssid     = "YOUR SSID WIFI";
-const char* password = "YOUR PASSWORS WIFI";
+const char* ssid     = "SMART XIRKA";
+const char* password = "EngInEEr@30";
 
 /// Socket.IO Settings ///
-//char host[] = "db.smpvanilla.com";
 char host[] = "api.smpvanilla.com";
 int port = 5042;
 char path[] = "/socket.io/?transport=websocket";
 bool useSSL = true;
-const char * sslFingerprint = "";
-const char* topic = "send_data"; //don't change this
-const char* key = "KEY DEVICE" //from page device you create
+const char* topic_server = "send_data"; //don`t delete this, you can`t send data if modify or delete
+const char* key = "6371fa1f4b64f54d3374a015-node_2"; //from page device you create
 
 unsigned long lastTime = 0;
 
 SocketIoClient webSocket;
 WiFiClient client;
-
-void socket_Connected(const char * payload, size_t length) {
-  Serial.println("Socket.IO Connected!");
-}
-
-void socket_event(const char * payload, size_t length) {
-  Serial.print("got message: ");
-  Serial.println(payload);
-}
-
-void socket_accept(const char * payload, size_t length) {
-  Serial.print("Accept Message : ");
-  Serial.println(payload);
-}
 
 void setup() {
   Serial.begin(115200);
@@ -45,14 +29,12 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
-  //send to server
-  webSocket.on(topic, socket_event);
-  
-  //listen data from server
+
+  //don`t delete or modify this, if you modify you can`t accpet data from server
   webSocket.on(key , socket_accept);
   
   if (useSSL) {
-    webSocket.beginSSL(host, port, path, sslFingerprint);
+    webSocket.beginSSL(host, port, path, "");
   } else {
     webSocket.begin(host, port, path);
   }
@@ -74,5 +56,5 @@ void generate_json(){
   doc["data"]["oksigen"] = random(0, 100); 
   doc["key"] = key;
   serializeJson(doc, json);
-  webSocket.emit(topic, json);
+  webSocket.emit(topic_server, json);
 }
