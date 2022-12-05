@@ -1,5 +1,5 @@
 #include <ArduinoJson.h>
-#include <WiFi.h>
+#include <ESP8266WiFi.h>
 #include "./src/library/SocketIoClient/SocketIoClient.h"
 
 #define led 2
@@ -19,7 +19,7 @@ char path[] = "/socket.io/?transport=websocket";
 bool useSSL = true;
 const char* topic_server = "send_data"; //don`t delete this, you can`t send data if modify or delete
 const char* device = "YOUR DEVICE NAME"; //name your device if empty can`t accept data from command
-const char* key = "YOUR KEY DEVICE"; //key yout device from page device you create
+const char* key = "YOUR DEVICE KEY"; //key y4b64f54d3374a015-node_1"; //key yout device from page device you create
 
 unsigned long lastTime = 0;
 
@@ -40,7 +40,7 @@ void setup() {
   webSocket.on(device , accept_cmd);
   
   if (useSSL) {
-    webSocket.beginSSL(host, port, path, "");
+    webSocket.beginSSL(host, port, path, 0);
   } else {
     webSocket.begin(host, port, path);
   }
@@ -50,7 +50,7 @@ void setup() {
 
 void loop() {
   webSocket.loop();
-  if(millis() - lastTime > 2000){
+  if(millis() - lastTime > 10000){
     generate_json();
     lastTime = millis();
   }
